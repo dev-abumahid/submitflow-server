@@ -1,5 +1,6 @@
 import { configs } from './app/configs/index.js';
 import { accountSwaggerDocs } from './app/modules/account/account.swagger.js';
+import { projectSwaggerDocs } from './app/modules/project/project.swagger.js';
 
 export const swaggerOptions = {
   definition: {
@@ -11,6 +12,7 @@ export const swaggerOptions = {
     },
     paths: {
       ...accountSwaggerDocs,
+      ...projectSwaggerDocs,
     },
     servers:
       configs.env === 'production'

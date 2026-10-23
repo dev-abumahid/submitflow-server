@@ -1,0 +1,7 @@
+model Project {
+    id        String   @id @default(uuid())
+    // example field, keep it in sync with project.validation.ts
+    name      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
