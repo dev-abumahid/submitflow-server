@@ -1,0 +1,49 @@
+enum ROLE {
+    MENTOR
+    STUDENT
+}
+
+model Account {
+    // PK
+    id                 String    @id @default(uuid())
+    email              String    @unique
+    password           String?
+    role               ROLE      @default(STUDENT)
+    isDeleted          Boolean   @default(false)
+    tokenVersion       Int       @default(0)
+
+    fullName           String
+    createdAt          DateTime  @default(now())
+    updatedAt          DateTime  @updatedAt
+
+    // Relation
+    refreshTokens RefreshToken[]
+}
+
+
+model RefreshToken {
+    tokenHash    String    @id
+    accountId    String
+    familyId     String
+    // the account's tokenVersion when issued; a password change makes it stale
+    tokenVersion Int
+    expiresAt    DateTime
+    // set when the token is rotated; kept until expiry to detect reuse
+    usedAt       DateTime?
+    createdAt    DateTime  @default(now())
+
+    account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+    @@index([accountId])
+    @@index([familyId])
+    @@index([expiresAt])
+}
+
+/// Hit counters for the auth rate limiters, shared by every app instance.
+model RateLimit {
+    key     String   @id
+    hits    Int
+    resetAt DateTime
+
+    @@index([resetAt])
+}
