@@ -12,10 +12,6 @@ const getToken = (req: Request): string | undefined => {
   return req.cookies?.[ACCESS_TOKEN_COOKIE];
 };
 
-/**
- * Requires a valid access token. With roles, also requires one of them:
- * `auth()` = any signed-in user, `auth('ADMIN')` = admins only.
- */
 const auth = (...roles: ROLE[]) => {
   return async (req: Request, _res: Response, next: NextFunction) => {
     try {

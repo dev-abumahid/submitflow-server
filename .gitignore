@@ -7,8 +7,6 @@ dist/
 build/
 
 # Env files
-.env
-.env.production
 
 # Logs
 logs/
@@ -28,7 +26,6 @@ prisma/generated/
 coverage/
 
 # IDE/editor
-.vscode/
 .idea/
 
 # Docker 
@@ -36,3 +33,4 @@ coverage/
 
 # backups made by `exp-node-server -g <name> --force`
 .exp-node-server/
+config.bat
