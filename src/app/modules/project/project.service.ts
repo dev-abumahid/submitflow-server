@@ -5,8 +5,7 @@ import { prisma } from '../../lib/prisma.js';
 import { AppError } from '../../utils/app_error.js';
 import { project_validations } from './project.validation.js';
 
-// req.body was already parsed by RequestValidator (see project.route.ts), so it only
-// holds the fields of these schemas: add a field there before the service can use it
+
 type CreatePayload = z.infer<typeof project_validations.create_project>;
 type UpdatePayload = z.infer<typeof project_validations.update_project>;
 type ReviewPayload = z.infer<typeof project_validations.review_project>;
@@ -94,9 +93,24 @@ const review_project_into_db = async (req: Request) => {
   return result;
 };
 
+const get_single_project_from_db = async (req: Request) => {
+  const { id } = req.params as { id: string };
+  const where: Prisma.ProjectWhereInput =
+    req.user!.role === 'MENTOR' ? { id } : { id, submitterId: req.user!.accountId };
+
+  const project = await prisma.project.findFirst({
+    where,
+    include: { submitter: person, reviewer: person },
+  });
+
+  if (!project) throw new AppError('Project not found', 404);
+  return project;
+};
+
 export const project_service = {
   get_my_projects_from_db,
   get_all_projects_from_db,
+  get_single_project_from_db,
   create_project_into_db,
   update_project_into_db,
   review_project_into_db,

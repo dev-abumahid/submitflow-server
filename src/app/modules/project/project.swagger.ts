@@ -73,6 +73,19 @@ export const projectSwaggerDocs = {
   },
 
   '/api/project/{id}': {
+    get: {
+      tags: ['project'],
+      summary: 'Fetch Single project (STUDENT and MENTOR)',
+      description: 'Only allowed while the project is PENDING.',
+      parameters: [idParam],
+      responses: {
+        200: { description: 'Project updated successfully' },
+        400: { description: 'Validation error' },
+        401: { description: 'Unauthorized' },
+        404: { description: 'Project not found' },
+        409: { description: 'Project is no longer PENDING' },
+      },
+    },
     patch: {
       tags: ['project'],
       summary: 'Update own project (STUDENT)',

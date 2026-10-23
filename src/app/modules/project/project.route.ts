@@ -7,6 +7,7 @@ import { project_validations } from './project.validation.js';
 const router = Router();
 
 router.get('/', auth('STUDENT', 'MENTOR'), project_controller.get_projects);
+router.get('/:id', auth('STUDENT', 'MENTOR'), project_controller.get_single_project);
 router.post(
   '/',
   auth('STUDENT'),

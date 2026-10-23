@@ -47,8 +47,19 @@ const review_project = catchAsync(async (req, res) => {
   });
 });
 
+const get_single_project = catchAsync(async (req, res) => {
+  const result = await project_service.get_single_project_from_db(req);
+  manageResponse(res, {
+    success: true,
+    statusCode: 200,
+    message: 'Project fetched successfully.',
+    data: result,
+  });
+});
+
 export const project_controller = {
   get_projects,
+  get_single_project,
   create_project,
   update_project,
   review_project,
