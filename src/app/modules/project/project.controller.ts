@@ -2,25 +2,18 @@ import catchAsync from '../../utils/catch_async.js';
 import manageResponse from '../../utils/manage_response.js';
 import { project_service } from './project.service.js';
 
-const get_all_project = catchAsync(async (req, res) => {
-  const result = await project_service.get_all_project_from_db(req);
+// students get their own projects, mentors get everyone's
+const get_projects = catchAsync(async (req, res) => {
+  const result =
+    req.user!.role === 'MENTOR'
+      ? await project_service.get_all_projects_from_db(req)
+      : await project_service.get_my_projects_from_db(req);
   manageResponse(res, {
     success: true,
     statusCode: 200,
-    message: 'All project fetched successfully.',
-    data: result,
-    meta: {},
-  });
-});
-
-const get_single_project = catchAsync(async (req, res) => {
-  const result = await project_service.get_single_project_from_db(req);
-  manageResponse(res, {
-    success: true,
-    statusCode: 200,
-    message: 'Single project fetched successfully.',
-    data: result,
-    meta: {},
+    message: 'Projects fetched successfully.',
+    data: result.data,
+    meta: result.meta,
   });
 });
 
@@ -29,9 +22,8 @@ const create_project = catchAsync(async (req, res) => {
   manageResponse(res, {
     success: true,
     statusCode: 201,
-    message: 'project created successfully.',
+    message: 'Project submitted successfully.',
     data: result,
-    meta: {},
   });
 });
 
@@ -40,27 +32,24 @@ const update_project = catchAsync(async (req, res) => {
   manageResponse(res, {
     success: true,
     statusCode: 200,
-    message: 'project updated successfully.',
+    message: 'Project updated successfully.',
     data: result,
-    meta: {},
   });
 });
 
-const delete_project = catchAsync(async (req, res) => {
-  const result = await project_service.delete_project_from_db(req);
+const review_project = catchAsync(async (req, res) => {
+  const result = await project_service.review_project_into_db(req);
   manageResponse(res, {
     success: true,
     statusCode: 200,
-    message: 'project deleted successfully.',
+    message: 'Project reviewed successfully.',
     data: result,
-    meta: {},
   });
 });
 
 export const project_controller = {
-  get_all_project,
-  get_single_project,
+  get_projects,
   create_project,
   update_project,
-  delete_project,
+  review_project,
 };

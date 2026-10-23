@@ -5,21 +5,22 @@ enum ROLE {
 
 model Account {
     // PK
-    id                 String    @id @default(uuid())
-    email              String    @unique
-    password           String?
-    role               ROLE      @default(STUDENT)
-    isDeleted          Boolean   @default(false)
-    tokenVersion       Int       @default(0)
+    id           String  @id @default(uuid())
+    email        String  @unique
+    password     String?
+    role         ROLE    @default(STUDENT)
+    isDeleted    Boolean @default(false)
+    tokenVersion Int     @default(0)
 
-    fullName           String
-    createdAt          DateTime  @default(now())
-    updatedAt          DateTime  @updatedAt
+    fullName  String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     // Relation
-    refreshTokens RefreshToken[]
+    refreshTokens     RefreshToken[]
+    submittedProjects Project[]      @relation("SubmittedProjects")
+    reviewedProjects  Project[]      @relation("ReviewedProjects")
 }
-
 
 model RefreshToken {
     tokenHash    String    @id
