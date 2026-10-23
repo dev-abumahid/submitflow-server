@@ -81,7 +81,6 @@ const get_user_account_from_db = async (req: Request) => {
       email: true,
       fullName: true,
       role: true,
-      provider: true,
       isDeleted: true,
     },
   });
